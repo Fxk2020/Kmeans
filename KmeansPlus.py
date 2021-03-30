@@ -2,15 +2,15 @@ import random
 import time
 from math import *
 import matplotlib.pyplot as plt
-
+import sys
 
 # 从文件种读取数据
 import pylab
 
 
-def read_data():
+def read_data(url):
     data_points = []
-    with open('data.txt', 'r') as fp:
+    with open(url, 'r') as fp:
         for line in fp:
             if line == '\n':
                 continue
@@ -123,16 +123,16 @@ def k_means(data_points, k):
 def print_result(count, end_sum_E, k, assignment):
     # 打印最终聚类结果
     result = ""
-    result += '经过' + str(count) + '次聚类，平方误差为：'+str(end_sum_E)
+    result += '经过' + str(count) + '次聚类，平方误差为：' + str(end_sum_E)
     result += '\n---------------------------------分类结果---------------------------------------'
     for i in range(k):
-        result += '\n第'+str(i + 1)+'类数据：'+str(assignment[i])
+        result += '\n第' + str(i + 1) + '类数据：' + str(assignment[i])
     result += '\n--------------------------------------------------------------------------------\n'
-    print("result:",result)
+    print("result:", result)
     return result
 
 
-def plot(k, assignment, center, result):
+def plot(k, assignment, center, result, outputUrl):
     # 初始坐标列表
     x = []
     y = []
@@ -156,17 +156,16 @@ def plot(k, assignment, center, result):
     # 显示并保存散点图
     tick = time.time()
     print("当前的时间戳为：", tick)
-    pylab.savefig('/Users/yuanbao/Desktop/测试/img/img' + str(tick) + '.png')
-    f = open('/Users/yuanbao/Desktop/测试/img/img' + str(tick) + '.txt', "x")
+    pylab.savefig(outputUrl + "/" + str(tick) + '.png')
+    f = open(outputUrl + "/" + str(tick) + '.txt', "x")
     f.write(result)
     f.close()
-    plt.show()
+    # plt.show()
 
 
-def main():
+def main(k=3, url="/Users/yuanbao/Desktop/kmeans算法/data.txt", outputUrl=""):
     # k个聚类中心
-    k = 4
-    data_points = read_data()
+    data_points = read_data(url)
     assignment, end_sum_E, end_center, count = k_means(data_points, k)
     min_sum_E = 1000
     # 返回较小误差
@@ -174,7 +173,14 @@ def main():
         min_sum_E = end_sum_E
         assignment, end_sum_E, end_center, count = k_means(data_points, k)
     result = print_result(count, min_sum_E, k, assignment)  # 输出结果
-    plot(k, assignment, end_center, result)  # 画图
+    plot(k, assignment, end_center, result, outputUrl)  # 画图
 
 
-main()
+if __name__ == '__main__':
+    a = []
+    # 其中sys.argv用于获取参数url1，url2等。而sys.argv[0]代表python程序名，所以列表从1开始读取参数。
+    for i in range(1, len(sys.argv)):
+        a.append((sys.argv[i]))
+
+    print(main(int(a[0]), a[1], a[2]))
+# main()
