@@ -88,9 +88,7 @@ if __name__ == '__main__':
 # print(pd.__version__)
 # print(openpyxl.__version__)
 
-# # 固定目录测试
-# main(2,"/Users/yuanbao/Desktop/工作簿1.xls",
-#                 "/Users/yuanbao/Desktop")
-    # read_data_excel("/Users/yuanbao/Desktop/data.xlsx")
+# 固定目录测试
+# main(2,"/Users/yuanbao/Desktop/kmeans算法/各地城市经纬度.xlsx", "/Users/yuanbao/Desktop")
 
 

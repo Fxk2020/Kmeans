@@ -1,12 +1,12 @@
 import time
 
 import pylab
-from sklearn import decomposition
-from sklearn.cluster import KMeans
-
-import matplotlib.pyplot as plt
-import matplotlib.cm as cm
 import numpy as np
+
+from matplotlib import pyplot as plt
+import matplotlib.cm as cm
+from sklearn.cluster import AgglomerativeClustering
+from sklearn import decomposition
 
 import xlrd
 import xlwt
@@ -15,43 +15,11 @@ from pylab import mpl
 import sys
 
 
-def write_excel_xls(path, sheet_name, variablesNames, labels, centers):
-    """
-    用于将分析结果写入文件
-    :param path: 输出路径
-    :param sheet_name: 创建的表名
-    :param variablesNames: 变量名
-    :param labels: 标签
-    :param centers: 聚类中心
-    :return: 成功创建表格
-    """
-    index = len(variablesNames)  # 获取需要写入数据的行数
-    workbook = xlwt.Workbook()  # 新建一个工作簿
-    sheet = workbook.add_sheet(sheet_name)  # 在工作簿中新建一个表格
-
-    index_centers = len(centers)
-
-    # 向表格中写入数据（对应的行和列）
-    sheet.write(0, 0, "实例名称")
-    for i in range(0, index):
-        sheet.write(i + 1, 0, variablesNames[i])
-    sheet.write(0, 1, "对应类别")
-    for i in range(0, index):
-        sheet.write(i + 1, 1, str(labels[i]))
-    sheet.write(0, 2, "聚类中心分别是：")
-    for i in range(0, index_centers):
-        sheet.write(i + 1, 2, str(centers[i]))
-    # 保存工作簿
-    workbook.save(path + "/result.xls")
-    print("xls格式表格写入数据成功！")
-
-
 def loadData(url):
     """
     :param url:待分析文件的路径
-    :return: Variable变量名的数组 values变量值的数组
+    :return: values, variables变量值和变量名
     """
-
     # 指定默认字体
     # 在mac系统下中文显示
     mpl.rcParams['font.sans-serif'] = ['Arial Unicode MS']
@@ -69,28 +37,32 @@ def loadData(url):
             values[row - 1, col - 1] = table.cell_value(row, col)
 
     variables = np.array(variables)
-    # print(values)
     return values, variables
 
 
-def kmeansMain(values, variables, k, outputDir):
+def write_excel_xls(path, sheet_name, variablesNames, labels):
     """
-    对输入数据进行聚类分析
-    :param values: 聚类的数据
-    :param variables: 聚类数据的名称
-    :param k: 聚类的个数
-    :param outputDir: 图像的输出路径
-    :return 聚类数据的标签和聚类中心点
+    用于将分析结果写入文件
+    :param path: 输出路径
+    :param sheet_name: 创建的表名
+    :param variablesNames: 变量名
+    :param labels: 标签
+    :return: 成功创建表格
     """
-    # 创建模型，进行聚类
-    kmeans = KMeans(n_clusters=k)
-    kmeans.fit(values)
+    index = len(variablesNames)  # 获取需要写入数据的行数
+    workbook = xlwt.Workbook()  # 新建一个工作簿
+    sheet = workbook.add_sheet(sheet_name)  # 在工作簿中新建一个表格
 
-    # 获取中心点和标签
-    centers = kmeans.cluster_centers_
-    labels = kmeans.labels_
-    PCA(X=values, label=labels, variablesName=variables, outputDir=outputDir)
-    return labels, centers
+    # 向表格中写入数据（对应的行和列）
+    sheet.write(0, 0, "实例名称")
+    for i in range(0, index):
+        sheet.write(i + 1, 0, variablesNames[i])
+    sheet.write(0, 1, "对应类别")
+    for i in range(0, index):
+        sheet.write(i + 1, 1, str(labels[i]))
+    # 保存工作簿
+    workbook.save(path + "/resultAgglomerative.xls")
+    print("xls格式表格写入数据成功！")
 
 
 def PCA(X, label, variablesName, outputDir):
@@ -122,17 +94,29 @@ def PCA(X, label, variablesName, outputDir):
     pylab.savefig(outputDir + "/" + str(tick) + '.png')
 
 
-def main(k, inputUrl, outputUrl):
+def agglomerative(inputUrl,outputDir,k):
     """
-    脚本的主入口
-    :param k: 聚类的个数
-    :param inputUrl: 分析文件的url
-    :param outputUrl: 结果输出url
+    进行层次聚类
+    :param inputUrl
+    :param outputDir
+    :param k:聚类的个数
+    :param data:聚类的数据
     :return:
     """
-    values, variables = loadData(inputUrl)
-    labels, centers = kmeansMain(values, variables, k=k, outputDir=outputUrl)
-    write_excel_xls(outputUrl, "result", variables, labels, centers)
+    data, variablesNames = loadData(inputUrl)
+    ward = AgglomerativeClustering(n_clusters=k, affinity='euclidean', linkage='ward')
+    labels = ward.fit_predict(data)
+
+    # 画图
+    PCA(X=data, label=labels, variablesName=variablesNames, outputDir=outputDir)
+
+    # 保存文件
+    write_excel_xls(outputDir,"result",variablesNames,labels)
+
+
+# 脚本入口
+def main(inputUrl,outputDir,k):
+    agglomerative(inputUrl,outputDir,k)
 
 
 if __name__ == '__main__':
@@ -140,6 +124,7 @@ if __name__ == '__main__':
     # 其中sys.argv用于获取参数url1，url2等。而sys.argv[0]代表python程序名，所以列表从1开始读取参数。
     for i in range(1, len(sys.argv)):  # 一定要引入sys包！！！！！！
         a.append((sys.argv[i]))
-    print(main(int(a[0]), a[1], a[2]))
+    print(main(a[0], a[1], int(a[2])))
 
-# main(5,"/Users/yuanbao/Desktop/测试/img/data.xlsx","/Users/yuanbao/Desktop")
+
+# main("/Users/yuanbao/Desktop/kmeans算法/data.xlsx","/Users/yuanbao/Desktop",3)
