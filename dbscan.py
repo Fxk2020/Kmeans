@@ -118,4 +118,4 @@ if __name__ == '__main__':
         a.append((sys.argv[i]))
     print(main(a[0], a[1], float(a[2]),int(a[3])))
 
-# main("/Users/yuanbao/Desktop/kmeans算法/dataDbscan.xlsx","/Users/yuanbao/Desktop",0.3,5)
+# main("/Users/yuanbao/Desktop/kmeans算法/各地城市经纬度.xlsx","/Users/yuanbao/Desktop",0.3,5)

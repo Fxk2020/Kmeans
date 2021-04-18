@@ -89,6 +89,6 @@ if __name__ == '__main__':
 # print(openpyxl.__version__)
 
 # 固定目录测试
-# main(2,"/Users/yuanbao/Desktop/kmeans算法/各地城市经纬度.xlsx", "/Users/yuanbao/Desktop")
+# main(2,"/Users/yuanbao/Desktop/kmeans算法/dataDbscan.xlsx", "/Users/yuanbao/Desktop")
 
 

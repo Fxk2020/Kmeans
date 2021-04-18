@@ -163,7 +163,7 @@ def plot(k, assignment, center, result, outputUrl):
     # plt.show()
 
 
-def main(k=3, url="/Users/yuanbao/Desktop/kmeans算法/data.txt", outputUrl=""):
+def main(k=3, url="/Users/yuanbao/Desktop/kmeans算法/data.txt", outputUrl="/Users/yuanbao/Desktop"):
     # k个聚类中心
     data_points = read_data(url)
     assignment, end_sum_E, end_center, count = k_means(data_points, k)
