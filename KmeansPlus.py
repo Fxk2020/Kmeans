@@ -128,7 +128,7 @@ def print_result(count, end_sum_E, k, assignment):
     for i in range(k):
         result += '\n第' + str(i + 1) + '类数据：' + str(assignment[i])
     result += '\n--------------------------------------------------------------------------------\n'
-    print("result:", result)
+    # print("result:", result)
     return result
 
 

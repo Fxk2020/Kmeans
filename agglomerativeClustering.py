@@ -7,6 +7,7 @@ from matplotlib import pyplot as plt
 import matplotlib.cm as cm
 from sklearn.cluster import AgglomerativeClustering
 from sklearn import decomposition
+import sklearn
 
 import xlrd
 import xlwt
@@ -120,11 +121,12 @@ def main(inputUrl,outputDir,k):
 
 
 if __name__ == '__main__':
-    a = []
-    # 其中sys.argv用于获取参数url1，url2等。而sys.argv[0]代表python程序名，所以列表从1开始读取参数。
-    for i in range(1, len(sys.argv)):  # 一定要引入sys包！！！！！！
-        a.append((sys.argv[i]))
-    print(main(a[0], a[1], int(a[2])))
+    print(sklearn.__version__)
+    # a = []
+    # # 其中sys.argv用于获取参数url1，url2等。而sys.argv[0]代表python程序名，所以列表从1开始读取参数。
+    # for i in range(1, len(sys.argv)):  # 一定要引入sys包！！！！！！
+    #     a.append((sys.argv[i]))
+    # print(main(a[0], a[1], int(a[2])))
 
-
-# main("/Users/yuanbao/Desktop/kmeans算法/data.xlsx","/Users/yuanbao/Desktop",3)
+#
+# main("/Users/yuanbao/Desktop/kmeans算法/data/data.xlsx","/Users/yuanbao/Desktop",3)

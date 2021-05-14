@@ -78,6 +78,8 @@ y_predict = estimators.predict(X_train)
 
 n_components:是聚类的个数；
 
+covariance_type:是选择哪一种协方差；
+
 fit是进行高斯混合聚类；
 
 predict是获得数据聚类的标签。
