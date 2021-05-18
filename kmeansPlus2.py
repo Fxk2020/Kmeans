@@ -68,7 +68,7 @@ def main(k,url,outputUrl="/Users/yuanbao/Desktop/测试/文件上传"):
     # 显示并保存散点图
     tick = time.time()
     print("当前的时间戳为：", tick)
-    pylab.savefig(outputUrl + "/" + str(tick) + '.png')
+    pylab.savefig(outputUrl + '/result.png')
     r_new.to_excel(outputUrl + "/" + str(tick) + '.xlsx')  # 自定义一个路径，保存在excel里面
     # plt.show()
 

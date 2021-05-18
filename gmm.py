@@ -119,7 +119,7 @@ def PCA(X, label, variablesName, outputDir):
     # 显示并保存散点图
     tick = time.time()
     print("当前的时间戳为：", tick)
-    pylab.savefig(outputDir + "/" + str(tick) + '.png')
+    pylab.savefig(outputDir + '/result.png')
 
 
 def main(covariance_type, k, inputUrl, outputUrl):

@@ -156,7 +156,7 @@ def plot(k, assignment, center, result, outputUrl):
     # 显示并保存散点图
     tick = time.time()
     print("当前的时间戳为：", tick)
-    pylab.savefig(outputUrl + "/" + str(tick) + '.png')
+    pylab.savefig(outputUrl + '/result.png')
     f = open(outputUrl + "/" + str(tick) + '.txt', "x")
     f.write(result)
     f.close()

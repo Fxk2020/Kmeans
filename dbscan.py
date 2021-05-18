@@ -87,7 +87,7 @@ def dbscan(inputUrl,outputDir,eps,min_samples):
     plt.scatter(x, y, c=y_pred)
     tick = time.time()
     print("当前的时间戳为：", tick)
-    pylab.savefig(outputDir + "/" + str(tick) + '.png')
+    pylab.savefig(outputDir + '/result.png')
 
     return value_name,labels
 

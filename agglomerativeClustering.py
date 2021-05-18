@@ -92,7 +92,7 @@ def PCA(X, label, variablesName, outputDir):
     # 显示并保存散点图
     tick = time.time()
     print("当前的时间戳为：", tick)
-    pylab.savefig(outputDir + "/" + str(tick) + '.png')
+    pylab.savefig(outputDir + '/result.png')
 
 
 def agglomerative(inputUrl,outputDir,k):
@@ -121,12 +121,11 @@ def main(inputUrl,outputDir,k):
 
 
 if __name__ == '__main__':
-    print(sklearn.__version__)
-    # a = []
-    # # 其中sys.argv用于获取参数url1，url2等。而sys.argv[0]代表python程序名，所以列表从1开始读取参数。
-    # for i in range(1, len(sys.argv)):  # 一定要引入sys包！！！！！！
-    #     a.append((sys.argv[i]))
-    # print(main(a[0], a[1], int(a[2])))
+    a = []
+    # 其中sys.argv用于获取参数url1，url2等。而sys.argv[0]代表python程序名，所以列表从1开始读取参数。
+    for i in range(1, len(sys.argv)):  # 一定要引入sys包！！！！！！
+        a.append((sys.argv[i]))
+    print(main(a[0], a[1], int(a[2])))
 
 #
 # main("/Users/yuanbao/Desktop/kmeans算法/data/data.xlsx","/Users/yuanbao/Desktop",3)
