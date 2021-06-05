@@ -1,5 +1,6 @@
 import time
 
+import openpyxl
 import pylab
 from sklearn.mixture import GaussianMixture
 from sklearn import decomposition
@@ -64,6 +65,30 @@ def write_excel_xls(path,sheet_name,variablesNames,labels):
     # 保存工作簿
     workbook.save(path + "/result.xls")
     print("xls格式表格写入数据成功！")
+
+
+def writeExcel(path,sheet_name,variablesNames,labels):
+    """
+        将聚类结果写入文件
+        :param path: 输出路径
+        :param sheet_name: 表名
+        :param variablesNames:变量名
+        :param labels: 预测的类别
+        :return: 成功写入文件
+    """
+    index = len(variablesNames)  # 获取需要写入数据的行数
+    outwb = openpyxl.Workbook()  # 打开一个将写的文件
+    outws = outwb.create_sheet(index=0)  # 在将写的文件创建sheet
+
+    # 向表格中写入数据（对应的行和列）
+    outws.cell(1, 1).value = '实例名称'
+    for i in range(1, index+1):
+        outws.cell(i+1, 1).value = variablesNames[i-1]
+    outws.cell(1, 2).value = "对应类别"
+    for i in range(1, index+1):
+        outws.cell(i+1, 2).value = str(labels[i-1])
+    saveExcel = path+"/result.xlsx"
+    outwb.save(saveExcel)  # 一定要记得保存
 
 
 def gmm(values, variables,k_number, covariance_type, outputDir):
@@ -132,14 +157,18 @@ def main(covariance_type, k, inputUrl, outputUrl):
     """
     values, variables = loadData(inputUrl)
     labels = gmm(values, variables, k_number=k, covariance_type=covariance_type, outputDir=outputUrl)
-    write_excel_xls(outputUrl,"result",variables,labels)
+    # write_excel_xls(outputUrl,"result",variables,labels)
+    writeExcel(outputUrl,'result',variables,labels)
 
 
-# main("full", 4,"/Users/yuanbao/Desktop/kmeans算法/data/irisGMM.xlsx","/Users/yuanbao/Desktop")
+# main("full", 4,"/Users/yuanbao/Desktop/kmeans算法/data/data.xlsx","/Users/yuanbao/Desktop")
 
 if __name__ == '__main__':
+    start = time.perf_counter()
     a = []
     # 其中sys.argv用于获取参数url1，url2等。而sys.argv[0]代表python程序名，所以列表从1开始读取参数。
     for i in range(1, len(sys.argv)):  # 一定要引入sys包！！！！！！
         a.append((sys.argv[i]))
     main(a[0], int(a[1]), a[2], a[3])
+    end = time.perf_counter()
+    print("程序的运行时间为：" + str(end - start))

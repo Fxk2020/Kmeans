@@ -1,5 +1,6 @@
 import time
 
+import openpyxl
 import pylab
 from sklearn import decomposition
 from sklearn.cluster import KMeans
@@ -13,6 +14,31 @@ import xlwt
 from pylab import mpl
 
 import sys
+
+
+def writeExcel(path, sheet_name, variablesNames, labels, centers):
+    index = len(variablesNames)  # 获取需要写入数据的行数
+    index_centers = len(centers)  # 聚类中心数
+
+    outwb = openpyxl.Workbook()  # 打开一个将写的文件
+    outws = outwb.create_sheet(index=0)  # 在将写的文件创建sheet
+
+    # 向表格中写入数据（对应的行和列）
+    outws.cell(1, 1).value = '实例名称'
+    for i in range(1, index+1):
+        outws.cell(i+1, 1).value = variablesNames[i-1]
+    outws.cell(1, 2).value = "对应类别"
+    for i in range(1, index+1):
+        outws.cell(i+1, 2).value = str(labels[i-1])
+    outws.cell(1, 3).value = "聚类中心分别是："
+    for i in range(1, index_centers+1):
+        outws.cell(i+1, 3).value = str(centers[i-1])
+    # for row in range(1,700):
+    #     for col in range(1,4):
+    #         outws.cell(row, col).value = row*2  # 写文件
+    #     print(row)
+    saveExcel = path+"/result.xlsx"
+    outwb.save(saveExcel)  # 一定要记得保存
 
 
 def write_excel_xls(path, sheet_name, variablesNames, labels, centers):
@@ -132,14 +158,19 @@ def main(k, inputUrl, outputUrl):
     """
     values, variables = loadData(inputUrl)
     labels, centers = kmeansMain(values, variables, k=k, outputDir=outputUrl)
-    write_excel_xls(outputUrl, "result", variables, labels, centers)
+    # write_excel_xls(outputUrl, "result", variables, labels, centers)  能写入的数据太少
+    writeExcel(outputUrl, "result", variables, labels, centers)
 
 
 if __name__ == '__main__':
+    start = time.perf_counter()
     a = []
     # 其中sys.argv用于获取参数url1，url2等。而sys.argv[0]代表python程序名，所以列表从1开始读取参数。
     for i in range(1, len(sys.argv)):  # 一定要引入sys包！！！！！！
         a.append((sys.argv[i]))
     print(main(int(a[0]), a[1], a[2]))
+    end = time.perf_counter()
+    print("程序的运行时间为：" + str(end - start))
 
-# main(5,"/Users/yuanbao/Desktop/测试/img/data.xlsx","/Users/yuanbao/Desktop")
+# main(6,"/Users/yuanbao/Desktop/kmeans算法/data/data.xlsx","/Users/yuanbao/Desktop")
+# # writeExcel()

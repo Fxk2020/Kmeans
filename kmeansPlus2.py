@@ -75,13 +75,15 @@ def main(k,url,outputUrl="/Users/yuanbao/Desktop/测试/文件上传"):
 
 # 运行脚本
 if __name__ == '__main__':
-
+    start = time.perf_counter()
     a = []
     # 其中sys.argv用于获取参数url1，url2等。而sys.argv[0]代表python程序名，所以列表从1开始读取参数。
     for i in range(1, len(sys.argv)):
         a.append((sys.argv[i]))
 
     print(main(int(a[0]), a[1], a[2]))
+    end = time.perf_counter()
+    print("程序的运行时间为：" + str(end - start))
 
 # 测试包的版本
 # print(xlrd.__version__)

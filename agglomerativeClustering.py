@@ -1,5 +1,6 @@
 import time
 
+import openpyxl
 import pylab
 import numpy as np
 
@@ -66,6 +67,30 @@ def write_excel_xls(path, sheet_name, variablesNames, labels):
     print("xls格式表格写入数据成功！")
 
 
+def writeExcel(path,sheet_name,variablesNames,labels):
+    """
+        将聚类结果写入文件
+        :param path: 输出路径
+        :param sheet_name: 表名
+        :param variablesNames:变量名
+        :param labels: 预测的类别
+        :return: 成功写入文件
+    """
+    index = len(variablesNames)  # 获取需要写入数据的行数
+    outwb = openpyxl.Workbook()  # 打开一个将写的文件
+    outws = outwb.create_sheet(index=0)  # 在将写的文件创建sheet
+
+    # 向表格中写入数据（对应的行和列）
+    outws.cell(1, 1).value = '实例名称'
+    for i in range(1, index+1):
+        outws.cell(i+1, 1).value = variablesNames[i-1]
+    outws.cell(1, 2).value = "对应类别"
+    for i in range(1, index+1):
+        outws.cell(i+1, 2).value = str(labels[i-1])
+    saveExcel = path+"/result.xlsx"
+    outwb.save(saveExcel)  # 一定要记得保存
+
+
 def PCA(X, label, variablesName, outputDir):
     """
     根据两个最大的主成分进行绘图 降维为2，方便画图,输出图像并保存
@@ -89,6 +114,7 @@ def PCA(X, label, variablesName, outputDir):
     plt.xlabel(x_label)  # 绘制x轴标签
     plt.ylabel(y_label)  # 绘制y轴标签
     plt.title('使用主成分分析法对高维数据进行降维，产生直观图像')
+    plt.show()
     # 显示并保存散点图
     tick = time.time()
     print("当前的时间戳为：", tick)
@@ -112,7 +138,8 @@ def agglomerative(inputUrl,outputDir,k):
     PCA(X=data, label=labels, variablesName=variablesNames, outputDir=outputDir)
 
     # 保存文件
-    write_excel_xls(outputDir,"result",variablesNames,labels)
+    # write_excel_xls(outputDir,"result",variablesNames,labels)
+    writeExcel(outputDir,"result",variablesNames,labels)
 
 
 # 脚本入口
@@ -121,11 +148,14 @@ def main(inputUrl,outputDir,k):
 
 
 if __name__ == '__main__':
+    start = time.perf_counter()
     a = []
     # 其中sys.argv用于获取参数url1，url2等。而sys.argv[0]代表python程序名，所以列表从1开始读取参数。
     for i in range(1, len(sys.argv)):  # 一定要引入sys包！！！！！！
         a.append((sys.argv[i]))
     print(main(a[0], a[1], int(a[2])))
+    end = time.perf_counter()
+    print("程序的运行时间为：" + str(end - start))
 
 #
-# main("/Users/yuanbao/Desktop/kmeans算法/data/data.xlsx","/Users/yuanbao/Desktop",3)
+# main("/Users/yuanbao/Desktop/kmeans算法/data/bigdata.xlsx","/Users/yuanbao/Desktop",3)

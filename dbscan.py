@@ -112,10 +112,13 @@ if __name__ == '__main__':
      反之min_samples过小的话，则会产生大量的核心对象，可能会导致类别数过少。
 
     """
+    start = time.perf_counter()
     a = []
     # 其中sys.argv用于获取参数url1，url2等。而sys.argv[0]代表python程序名，所以列表从1开始读取参数。
     for i in range(1, len(sys.argv)):  # 一定要引入sys包！！！！！！
         a.append((sys.argv[i]))
     print(main(a[0], a[1], float(a[2]),int(a[3])))
+    end = time.perf_counter()
+    print("程序的运行时间为：" + str(end - start))
 
 # main("/Users/yuanbao/Desktop/kmeans算法/各地城市经纬度.xlsx","/Users/yuanbao/Desktop",0.3,5)
