@@ -114,7 +114,8 @@ def gmm(values, variables,k_number, covariance_type, outputDir):
     estimators.fit(X_train)
     y_predict = estimators.predict(X_train)
     # print(y_predict)
-    PCA(X=values, label=y_predict, variablesName=variables, outputDir=outputDir)
+    if len(variables) < 2000:
+        PCA(X=values, label=y_predict, variablesName=variables, outputDir=outputDir)
     return y_predict
 
 

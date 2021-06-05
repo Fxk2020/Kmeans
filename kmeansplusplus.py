@@ -25,19 +25,19 @@ def writeExcel(path, sheet_name, variablesNames, labels, centers):
 
     # 向表格中写入数据（对应的行和列）
     outws.cell(1, 1).value = '实例名称'
-    for i in range(1, index+1):
-        outws.cell(i+1, 1).value = variablesNames[i-1]
+    for i in range(1, index + 1):
+        outws.cell(i + 1, 1).value = variablesNames[i - 1]
     outws.cell(1, 2).value = "对应类别"
-    for i in range(1, index+1):
-        outws.cell(i+1, 2).value = str(labels[i-1])
+    for i in range(1, index + 1):
+        outws.cell(i + 1, 2).value = str(labels[i - 1])
     outws.cell(1, 3).value = "聚类中心分别是："
-    for i in range(1, index_centers+1):
-        outws.cell(i+1, 3).value = str(centers[i-1])
+    for i in range(1, index_centers + 1):
+        outws.cell(i + 1, 3).value = str(centers[i - 1])
     # for row in range(1,700):
     #     for col in range(1,4):
     #         outws.cell(row, col).value = row*2  # 写文件
     #     print(row)
-    saveExcel = path+"/result.xlsx"
+    saveExcel = path + "/result.xlsx"
     outwb.save(saveExcel)  # 一定要记得保存
 
 
@@ -115,7 +115,8 @@ def kmeansMain(values, variables, k, outputDir):
     # 获取中心点和标签
     centers = kmeans.cluster_centers_
     labels = kmeans.labels_
-    PCA(X=values, label=labels, variablesName=variables, outputDir=outputDir)
+    if len(variables) < 2000:
+        PCA(X=values, label=labels, variablesName=variables, outputDir=outputDir)
     return labels, centers
 
 
